@@ -1,22 +1,16 @@
 package custom;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Suscripcion {
-    private int precio = 15000;    
     private String zonaCobertura;
     private Map<Integer, Suscriptor> mapSuscriptores = new HashMap<>();
+    private List<PaqueteCanales> paquetesDisponibles = new ArrayList<>();
     
     public Suscripcion(String sector) {
         zonaCobertura = sector;
-    }
-    
-    public int getPrecio() {
-        return precio;
-    }
-    
-    public void setPrecio(int precio) {
-        this.precio = precio;
     }
     
     public String getZonaCobertura() {
@@ -33,5 +27,20 @@ public class Suscripcion {
     
     public void setMapSuscriptores(Map<Integer, Suscriptor> mapSuscriptores) {
         this.mapSuscriptores = mapSuscriptores;
+    }
+
+    public List<PaqueteCanales> getPaquetesDisponibles() {
+        return paquetesDisponibles;
+    }
+
+    public void agregarPaqueteCanales(PaqueteCanales paquete) {
+        paquetesDisponibles.add(paquete);
+    }
+
+    public void mostrarPaquetesCanales() {
+        System.out.println("Paquetes disponibles en " + zonaCobertura + ":");
+        for (PaqueteCanales paquete : paquetesDisponibles) {
+            System.out.println(paquete);
+        }
     }
 }

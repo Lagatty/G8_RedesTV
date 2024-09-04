@@ -13,8 +13,8 @@ public class AdminSuscripciones {
         crearSuscripciones();
         
         // Datos iniciales
-        agregarSuscriptor("Juan Pérez", "Valparaiso");
-        agregarSuscriptor("María González", "Quillota", 30);
+        agregarSuscriptor("Juan", "Valparaiso");
+        agregarSuscriptor("Maria", "Quillota", 30);
     }
     
     public ArrayList<Suscripcion> getSuscripciones() {
@@ -68,5 +68,35 @@ public class AdminSuscripciones {
             }
         }
         System.out.println("Sector no encontrado.");
+    }
+
+    public void agregarPaqueteCanalesASector(String sector, PaqueteCanales paquete) {
+        for (Suscripcion suscripcion : suscripciones) {
+            if (suscripcion.getZonaCobertura().equalsIgnoreCase(sector)) {
+                suscripcion.agregarPaqueteCanales(paquete);
+                System.out.println("Paquete de canales agregado con éxito a la suscripción de " + sector);
+                return;
+            }
+        }
+        System.out.println("Sector no encontrado.");
+    }
+
+    public void mostrarPaquetesPorSector(String sector) {
+        for (Suscripcion suscripcion : suscripciones) {
+            if (suscripcion.getZonaCobertura().equalsIgnoreCase(sector)) {
+                suscripcion.mostrarPaquetesCanales();
+                return;
+            }
+        }
+        System.out.println("Sector no encontrado.");
+    }
+
+    public void identificarSectoresDebiles() {
+        System.out.println("Sectores débiles en captación de clientes:");
+        for (Suscripcion suscripcion : suscripciones) {
+            if (suscripcion.getMapSuscriptores().size() < 5) { // Ejemplo de criterio
+                System.out.println(suscripcion.getZonaCobertura() + " - Suscriptores: " + suscripcion.getMapSuscriptores().size());
+            }
+        }
     }
 }

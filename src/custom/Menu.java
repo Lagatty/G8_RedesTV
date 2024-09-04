@@ -17,7 +17,15 @@ public class Menu {
         int input;
         
         while(true) {
-            System.out.println("\nLista de opciones\n 1: Agregar Suscriptor ; 2: Listar Suscriptores ; 3: Listar sectores ; 0: Salir \n Ingrese opcion: ");
+            System.out.println("\nLista de opciones\n" +
+                    "1: Agregar Suscriptor\n" +
+                    "2: Listar Suscriptores\n" +
+                    "3: Listar sectores\n" +
+                    "4: Agregar Paquete de Canales\n" +
+                    "5: Mostrar Paquetes por Sector\n" +
+                    "6: Identificar Sectores Débiles\n" +
+                    "0: Salir\n" +
+                    "Ingrese opcion: ");
             ingresado = lector.readLine();
             try {
                 input = Integer.parseInt(ingresado);
@@ -40,6 +48,15 @@ public class Menu {
                     break;
                 case 3:
                     admin.mostrarSectores();
+                    break;
+                case 4:
+                    agregarPaqueteCanales(admin, lector);
+                    break;
+                case 5:
+                    mostrarPaquetesPorSector(admin, lector);
+                    break;
+                case 6:
+                    admin.identificarSectoresDebiles();
                     break;
                 default:
                     System.out.println("Opción no válida. Por favor, intente de nuevo.");
@@ -66,5 +83,30 @@ public class Menu {
                 admin.agregarSuscriptor(nombre, sector);
             }
         }
+    }
+
+    private void agregarPaqueteCanales(AdminSuscripciones admin, BufferedReader lector) throws IOException {
+        System.out.println("Ingrese nombre del paquete de canales:");
+        String nombre = lector.readLine();
+        System.out.println("Ingrese precio base del paquete:");
+        double precioBase = Double.parseDouble(lector.readLine());
+        PaqueteCanales paquete = new PaqueteCanales(nombre, precioBase);
+        
+        System.out.println("Ingrese canales (escriba 'fin' para terminar):");
+        String canal;
+        while (!(canal = lector.readLine()).equalsIgnoreCase("fin")) {
+            paquete.agregarCanal(canal);
+        }
+        
+        System.out.println("Ingrese sector para agregar el paquete:");
+        String sector = lector.readLine();
+
+        admin.agregarPaqueteCanalesASector(sector, paquete);
+    }
+
+    private void mostrarPaquetesPorSector(AdminSuscripciones admin, BufferedReader lector) throws IOException {
+        System.out.println("Ingrese sector para mostrar los paquetes de canales:");
+        String sector = lector.readLine();
+        admin.mostrarPaquetesPorSector(sector);
     }
 }
