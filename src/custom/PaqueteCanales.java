@@ -32,6 +32,10 @@ public class PaqueteCanales {
     public void agregarCanal(String canal) {
         this.canales.add(canal);
     }
+    
+    public void agregarCanal() {
+    	this.canales.add("Canal_x");
+    }
 
     public double getPrecioBase() {
         return precioBase;
