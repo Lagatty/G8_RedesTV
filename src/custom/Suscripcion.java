@@ -8,23 +8,23 @@ public class Suscripcion {
     private String zonaCobertura;
     private Map<Integer, Suscriptor> mapSuscriptores = new HashMap<>();
     private List<PaqueteCanales> paquetesDisponibles = new ArrayList<>();
-    
+
     public Suscripcion(String sector) {
         zonaCobertura = sector;
     }
-    
+
     public String getZonaCobertura() {
         return zonaCobertura;
     }
-    
+
     public void setZonaCobertura(String zonaCobertura) {
         this.zonaCobertura = zonaCobertura;
     }
-    
+
     public Map<Integer, Suscriptor> getMapSuscriptores() {
         return mapSuscriptores;
     }
-    
+
     public void setMapSuscriptores(Map<Integer, Suscriptor> mapSuscriptores) {
         this.mapSuscriptores = mapSuscriptores;
     }
@@ -39,8 +39,8 @@ public class Suscripcion {
 
     public void mostrarPaquetesCanales() {
         System.out.println("Paquetes disponibles en " + zonaCobertura + ":");
-        for (PaqueteCanales paquete : paquetesDisponibles) {
-            System.out.println(paquete);
+        for (int i = 0; i < paquetesDisponibles.size(); i++) {
+            System.out.println((i + 1) + ". " + paquetesDisponibles.get(i));
         }
     }
 }

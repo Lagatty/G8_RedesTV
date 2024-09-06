@@ -1,5 +1,4 @@
 package custom;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,11 +57,11 @@ public class PaqueteCanales {
     @Override
     public String toString() {
         return "PaqueteCanales{" +
-                "nombre='" + nombre + '\'' +
-                ", canales=" + canales +
-                ", precioBase=" + precioBase +
-                ", precioOferta=" + precioOferta +
-                ", enOferta=" + enOferta +
-                '}';
+               "nombre='" + nombre + '\'' +
+               ", canales=" + canales.size() +
+               ", precioBase=" + precioBase +
+               ", precioOferta=" + precioOferta +
+               ", enOferta=" + enOferta +
+               '}';
     }
 }

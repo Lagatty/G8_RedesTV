@@ -21,9 +21,11 @@ public class Menu {
                     "1: Agregar Suscriptor\n" +
                     "2: Listar Suscriptores\n" +
                     "3: Listar sectores\n" +
-                    "4: Agregar Paquete de Canales\n" +
-                    "5: Mostrar Paquetes por Sector\n" +
-                    "6: Identificar Sectores Débiles\n" +
+                    "4: Agregar Paquete Global de Canales\n" +
+                    "5: Listar Paquetes Globales\n" +
+                    "6: Agregar Paquete a Sector\n" +
+                    "7: Mostrar Paquetes por Sector\n" +
+                    "8: Identificar Sectores Débiles\n" +
                     "0: Salir\n" +
                     "Ingrese opcion: ");
             ingresado = lector.readLine();
@@ -50,12 +52,18 @@ public class Menu {
                     admin.mostrarSectores();
                     break;
                 case 4:
-                    agregarPaqueteCanales(admin, lector);
+                    agregarPaqueteGlobal(admin, lector);
                     break;
                 case 5:
-                    mostrarPaquetesPorSector(admin, lector);
+                    admin.listarPaquetesGlobales();
                     break;
                 case 6:
+                    agregarPaqueteASector(admin, lector);
+                    break;
+                case 7:
+                    mostrarPaquetesPorSector(admin, lector);
+                    break;
+                case 8:
                     admin.identificarSectoresDebiles();
                     break;
                 default:
@@ -85,7 +93,7 @@ public class Menu {
         }
     }
 
-    private void agregarPaqueteCanales(AdminSuscripciones admin, BufferedReader lector) throws IOException {
+    private void agregarPaqueteGlobal(AdminSuscripciones admin, BufferedReader lector) throws IOException {
         System.out.println("Ingrese nombre del paquete de canales:");
         String nombre = lector.readLine();
         System.out.println("Ingrese precio base del paquete:");
@@ -98,10 +106,16 @@ public class Menu {
             paquete.agregarCanal(canal);
         }
         
+        admin.agregarPaqueteGlobal(paquete);
+    }
+
+    private void agregarPaqueteASector(AdminSuscripciones admin, BufferedReader lector) throws IOException {
         System.out.println("Ingrese sector para agregar el paquete:");
         String sector = lector.readLine();
+        System.out.println("Ingrese ID del paquete global a agregar:");
+        int paqueteId = Integer.parseInt(lector.readLine());
 
-        admin.agregarPaqueteCanalesASector(sector, paquete);
+        admin.agregarPaqueteCanalesASector(sector, paqueteId);
     }
 
     private void mostrarPaquetesPorSector(AdminSuscripciones admin, BufferedReader lector) throws IOException {
