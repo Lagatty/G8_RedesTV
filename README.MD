@@ -1,17 +1,42 @@
-Sistema de Manejo de Redes de Televisión por Cable
-(Se que el readme no se usa par esto jaja pero ya lo hice uwu)
-//felipeb
+# Sistema de Gestión de Suscripciones de TV
 
-04-09
-hice un par de mods a tu código original
+Este proyecto implementa un sistema para gestionar suscripciones de TV por sectores, con paquetes de canales y suscriptores.
 
-Cambios Recientes:
-1. Nueva clase PaqueteCanales: La añadí para gestionar los diferentes paquetes de canales que ofrecemos. Esto nos permite tener una estructura clara para cada oferta.
+## Estructura del Proyecto
 
-2. Actualización de Suscripcion: Modifiqué esta clase para incluir una lista de PaqueteCanales. Ahora podemos asociar paquetes específicos a cada suscripción.
+### Clases Principales:
 
-3. Cambios en AdminSuscripciones: Agregué métodos para manejar los paquetes de canales por sector. Esto nos da más flexibilidad en la gestión de ofertas por zona (no se si es tan necesario).
+1. **AdminSuscripciones**: Gestiona suscripciones, sectores y paquetes globales.
+   - Utiliza ArrayList para almacenar suscripciones, sectores y paquetes globales.
+   - Métodos principales: agregarSuscriptor, agregarPaqueteGlobal, agregarPaqueteCanalesASector.
 
-4. Expansión del menú principal: Incluí opciones para gestionar los paquetes de canales.
+2. **Suscripcion**: Representa una suscripción en un sector específico.
+   - Usa HashMap para almacenar suscriptores y ArrayList para paquetes disponibles.
+   - Métodos clave: agregarPaqueteCanales, mostrarPaquetesCanales.
 
-5. Identificación de sectores débiles: Implementé una función para detectar áreas con baja captación de clientes (se puede modificar, ahora solo hace suscripcion.getMapSuscriptores().size() < 5)
+3. **PaqueteCanales**: Define un paquete de canales.
+   - Contiene lista de canales (ArrayList) y detalles de precios.
+
+4. **Suscriptor**: Representa a un suscriptor individual.
+   - Almacena información como nombre, edad y ID único.
+
+5. **Menu**: Maneja la interacción con el usuario.
+   - Utiliza BufferedReader para entrada de usuario.
+   - Implementa un bucle principal para mostrar opciones y procesar selecciones.
+
+## Funcionalidades Principales
+
+- Agregar y listar suscriptores por sector.
+- Crear y gestionar paquetes de canales globales.
+- Asignar paquetes de canales a sectores específicos.
+- Identificar sectores con baja captación de clientes.
+
+## Interacciones Clave
+
+- **Menu** interactúa con **AdminSuscripciones** para realizar operaciones.
+- **AdminSuscripciones** gestiona **Suscripcion**, **PaqueteCanales** y **Suscriptor**.
+- **Suscripcion** contiene múltiples **Suscriptor** y **PaqueteCanales**.
+
+## Uso
+
+Ejecute la clase Menu para iniciar la aplicación. Siga las instrucciones en pantalla para navegar por las opciones del sistema.
