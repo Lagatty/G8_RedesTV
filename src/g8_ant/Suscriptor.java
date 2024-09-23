@@ -1,4 +1,4 @@
-package custom;
+package g8_ant;
 import java.util.Date;
 
 public class Suscriptor {

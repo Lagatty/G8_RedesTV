@@ -1,16 +1,16 @@
-package custom;
+package g8_ant;
 import java.io.*;
 
 public class Menu {
     public Menu() {
     }
-    
+    /*
     public static void main(String[] args) throws IOException {
         AdminSuscripciones adminSp = new AdminSuscripciones();
         Menu menu = new Menu();
         menu.ejecutarMenu(adminSp);
     }
-    
+    */
     public void ejecutarMenu(AdminSuscripciones admin) throws IOException {
         BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
         String ingresado;
