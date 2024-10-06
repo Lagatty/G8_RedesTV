@@ -1,13 +1,20 @@
 package com.example.tv;
 
-import com.example.tv.util.DBManager;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 import com.example.tv.view.MainWindow;
 
 public class Main {
     public static void main(String[] args) {
-        DBManager.initDB();
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            new MainWindow().setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            MainWindow window = new MainWindow();
+            window.setVisible(true);
         });
     }
 }

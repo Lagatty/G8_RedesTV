@@ -1,20 +1,42 @@
 package com.example.tv.view;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 import com.example.tv.controller.PaqueteCanalesController;
 import com.example.tv.controller.SectorController;
 import com.example.tv.controller.SuscriptorController;
 import com.example.tv.model.PaqueteCanales;
 import com.example.tv.model.Sector;
 import com.example.tv.model.Suscriptor;
+import com.example.tv.util.DBManager;
 import com.example.tv.util.SuscriptorException;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import javax.swing.*;
 
 public class MainWindow extends JFrame {
     private SuscriptorController suscriptorController;
@@ -31,6 +53,16 @@ public class MainWindow extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+          // Inicializar la base de datos
+          boolean dbExisted = DBManager.dbExists();
+          DBManager.initDB();
+          if (!dbExisted) {
+              JOptionPane.showMessageDialog(this,
+                  "Se ha creado una nueva base de datos con datos de ejemplo.",
+                  "Base de Datos Creada",
+                  JOptionPane.INFORMATION_MESSAGE);
+          }
+  
         // Panel principal
         JPanel mainPanel = new JPanel(new BorderLayout());
 
@@ -57,7 +89,7 @@ public class MainWindow extends JFrame {
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
         // Panel de botones
-        JPanel buttonPanel = new JPanel(new GridLayout(6, 2, 10, 10));
+        JPanel buttonPanel = new JPanel(new GridLayout(7, 2, 10, 10));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         addButton(buttonPanel, "Listar Suscriptores", this::listarSuscriptores);
@@ -72,6 +104,8 @@ public class MainWindow extends JFrame {
         addButton(buttonPanel, "Ver Estadísticas", this::verEstadisticas);
         addButton(buttonPanel, "Filtrar Suscriptores", this::filtrarSuscriptores);
         addButton(buttonPanel, "Generar Reporte", this::generarReporte);
+        addButton(buttonPanel, "Mostrar Ruta DB", this::mostrarRutaDB);
+        addButton(buttonPanel, "Borrar DB", this::borrarDB);
 
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
 
@@ -80,18 +114,18 @@ public class MainWindow extends JFrame {
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Información de autores
-        JLabel authorsLabel = new JLabel("Francisco Gática y Felipe Bechan");
+        JLabel authorsLabel = new JLabel("Felipe Bechan - Francisco Gatica.");
         bottomPanel.add(authorsLabel, BorderLayout.WEST);
 
         // Enlace a GitHub
-        JLabel githubLabel = new JLabel("<html><u>Repo de Git <3</u></html>");
+        JLabel githubLabel = new JLabel("<html><u>Github Repo:</u></html>");
         githubLabel.setForeground(Color.BLUE);
         githubLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         githubLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
-                    Desktop.getDesktop().browse(new URI("https://github.com/Lagatty/G8_RedesTV"));
+                    Desktop.getDesktop().browse(new URI("https://github.com/Lagatty/G8_RedesTV/"));
                 } catch (IOException | URISyntaxException ex) {
                     ex.printStackTrace();
                 }
@@ -294,6 +328,29 @@ public class MainWindow extends JFrame {
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setPreferredSize(new Dimension(400, 300));
         JOptionPane.showMessageDialog(this, scrollPane, titulo, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void mostrarRutaDB() {
+        String dbPath = DBManager.getDBPath();
+        JOptionPane.showMessageDialog(this, "La base de datos se encuentra en:\n" + dbPath, "Ruta de la Base de Datos", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void borrarDB() {
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Está seguro de que desea borrar la base de datos? Esta acción no se puede deshacer.", 
+            "Confirmar borrado de DB", 
+            JOptionPane.YES_NO_OPTION, 
+            JOptionPane.WARNING_MESSAGE);
+        
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            try {
+                Files.deleteIfExists(Paths.get(DBManager.getDBPath()));
+                JOptionPane.showMessageDialog(this, "Base de datos borrada con éxito. El programa se cerrará.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                System.exit(0);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error al borrar la base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     public static void main(String[] args) {

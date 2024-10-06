@@ -1,9 +1,16 @@
 package com.example.tv.util;
 
-import java.sql.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DBManager {
-    private static final String DB_URL = "jdbc:sqlite:sistematv.db";
+    private static final String DB_NAME = "sistematv.db";
+    private static final String DB_PATH = System.getProperty("user.home") + "/." + DB_NAME;
+    private static final String DB_URL = "jdbc:sqlite:" + DB_PATH;
     
     static {
         try {
@@ -17,7 +24,16 @@ public class DBManager {
         return DriverManager.getConnection(DB_URL);
     }
 
+    public static String getDBPath() {
+        return DB_PATH;
+    }
+
+    public static boolean dbExists() {
+        return Files.exists(Paths.get(DB_PATH));
+    }
+
     public static void initDB() {
+        boolean dbExisted = dbExists();
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement()) {
             
@@ -49,7 +65,7 @@ public class DBManager {
                          "paquete_id INTEGER," +
                          "FOREIGN KEY(paquete_id) REFERENCES PaquetesCanales(id))");
             
-            // Crear tabla PaquetesSectores (relación muchos a muchos)
+            // Crear tabla PaquetesSectores
             stmt.execute("CREATE TABLE IF NOT EXISTS PaquetesSectores (" +
                          "paquete_id INTEGER," +
                          "sector_id INTEGER," +
@@ -57,9 +73,14 @@ public class DBManager {
                          "FOREIGN KEY(paquete_id) REFERENCES PaquetesCanales(id)," +
                          "FOREIGN KEY(sector_id) REFERENCES Sectores(id))");
             
-            // Insertar algunos sectores de ejemplo
-            stmt.execute("INSERT OR IGNORE INTO Sectores (nombre) VALUES ('Valparaiso'), ('Quillota'), ('Calera')");
-            
+            if (!dbExisted) {
+                // Insertar datos de ejemplo
+                stmt.execute("INSERT INTO Sectores (nombre) VALUES ('Valparaíso'), ('Viña del Mar'), ('Quilpué')");
+                stmt.execute("INSERT INTO Suscriptores (nombre, edad, sector_id) VALUES ('Juan Pérez', 30, 1), ('María González', 25, 2)");
+                stmt.execute("INSERT INTO PaquetesCanales (nombre, precioBase) VALUES ('Básico', 10000), ('Premium', 20000)");
+                stmt.execute("INSERT INTO Canales (nombre, paquete_id) VALUES ('Canal 1', 1), ('Canal 2', 1), ('Canal 3', 2)");
+                stmt.execute("INSERT INTO PaquetesSectores (paquete_id, sector_id) VALUES (1, 1), (1, 2), (2, 2)");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
